@@ -3,6 +3,7 @@ import { StaffSurveySheet } from './entities/staff-survey-sheet.entity';
 import { StaffSurveyService } from './staff-survey.service';
 import { StaffSurveySheetDTO } from './dtos/staff-survey-sheet.dto';
 import { StaffSurveyCriteria } from './entities/staff-survey-criteria.entity';
+import { StaffSurveyBatch } from './entities/staff-survey-batch.entity';
 
 @Resolver(() => StaffSurveySheet)
 export class StaffSurveyResolver {
@@ -35,5 +36,10 @@ export class StaffSurveyResolver {
   @Query(() => [StaffSurveyCriteria])
   async getCriteriaList() {
     return await this.staffSurveyService.getCriteriaList();
+  }
+
+  @Query(() => [StaffSurveyBatch])
+  async getBatchList() {
+    return await this.staffSurveyService.getBatchList();
   }
 }

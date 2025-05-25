@@ -189,6 +189,7 @@ type Query {
 
   """Get detail information of a faculty and its lecturer list"""
   faculty(id: String!): Faculty
+  getBatchList: [StaffSurveyBatch!]!
   getCriteriaList: [StaffSurveyCriteria!]!
 
   """List all points, group by a specific entity"""

@@ -60,6 +60,10 @@ export class StaffSurveyService {
     return await this.staffSurveyCriteriaRepo.find({});
   }
 
+  async getBatchList() {
+    return await this.staffSurveyBatchRepo.find({});
+  }
+
   async getCriteria({
     criteria_name,
     criteria_category,
