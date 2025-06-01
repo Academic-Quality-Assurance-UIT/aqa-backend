@@ -163,6 +163,16 @@ input PaginationArgs {
   size: Int = 10
 }
 
+type PointByCategoryDTO {
+  avg_point: Float!
+  category: String!
+}
+
+type PointByCriteriaDTO {
+  avg_point: Float!
+  criteria: String!
+}
+
 type Program {
   program: String!
 }
@@ -191,6 +201,8 @@ type Query {
   faculty(id: String!): Faculty
   getBatchList: [StaffSurveyBatch!]!
   getCriteriaList: [StaffSurveyCriteria!]!
+  getPointsByCategory: [PointByCategoryDTO!]!
+  getPointsByCriteria(category: String): [PointByCriteriaDTO!]!
 
   """List all points, group by a specific entity"""
   groupedPoints(class_id: String, class_type: String, criteria_id: String, faculty_id: String, groupEntity: String = "Subject", keyword: String = "", lecturer_id: String, page: Int = 0, program: String, semester_id: String, size: Int = 10, subjects: [String!]): PaginatedGroupedPoint!

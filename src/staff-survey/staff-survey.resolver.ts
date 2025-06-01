@@ -1,9 +1,11 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { PointByCategoryDTO } from './dtos/point-by-category.dto';
+import { PointByCriteriaDTO } from './dtos/point-by-criteria.dto';
+import { StaffSurveySheetDTO } from './dtos/staff-survey-sheet.dto';
+import { StaffSurveyBatch } from './entities/staff-survey-batch.entity';
+import { StaffSurveyCriteria } from './entities/staff-survey-criteria.entity';
 import { StaffSurveySheet } from './entities/staff-survey-sheet.entity';
 import { StaffSurveyService } from './staff-survey.service';
-import { StaffSurveySheetDTO } from './dtos/staff-survey-sheet.dto';
-import { StaffSurveyCriteria } from './entities/staff-survey-criteria.entity';
-import { StaffSurveyBatch } from './entities/staff-survey-batch.entity';
 
 @Resolver(() => StaffSurveySheet)
 export class StaffSurveyResolver {
@@ -41,5 +43,17 @@ export class StaffSurveyResolver {
   @Query(() => [StaffSurveyBatch])
   async getBatchList() {
     return await this.staffSurveyService.getBatchList();
+  }
+
+  @Query(() => [PointByCategoryDTO])
+  async getPointsByCategory() {
+    return await this.staffSurveyService.getPointsByCategory();
+  }
+
+  @Query(() => [PointByCriteriaDTO])
+  async getPointsByCriteria(
+    @Args('category', { type: () => String, nullable: true }) category?: string,
+  ) {
+    return await this.staffSurveyService.getPointsByCriteria(category);
   }
 }

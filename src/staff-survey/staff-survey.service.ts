@@ -64,6 +64,35 @@ export class StaffSurveyService {
     return await this.staffSurveyBatchRepo.find({});
   }
 
+  async getPointsByCategory() {
+    return await this.staffSurveyPointRepo.query(`
+      SELECT
+        criteria.category AS category,
+        AVG(point.point) AS avg_point
+      FROM staff_survey_point AS point
+      JOIN staff_survey_criteria AS criteria
+      ON point.staff_survery_criteria_id = criteria.staff_survery_criteria_id
+      WHERE criteria.category != 'ĐƠN VỊ'
+      GROUP BY criteria.category
+    `);
+  }
+
+  async getPointsByCriteria(category: string) {
+    return await this.staffSurveyPointRepo.query(
+      `
+      SELECT
+        criteria.display_name AS criteria,
+        AVG(point.point) AS avg_point
+      FROM staff_survey_point AS point
+      JOIN staff_survey_criteria AS criteria
+      ON point.staff_survery_criteria_id = criteria.staff_survery_criteria_id
+      WHERE criteria.category = $1
+      GROUP BY criteria.display_name
+    `,
+      [category],
+    );
+  }
+
   async getCriteria({
     criteria_name,
     criteria_category,
