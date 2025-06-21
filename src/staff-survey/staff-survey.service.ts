@@ -7,6 +7,7 @@ import { StaffSurveyBatch } from './entities/staff-survey-batch.entity';
 import { StaffSurveyCriteria } from './entities/staff-survey-criteria.entity';
 import { StaffSurveyPoint } from './entities/staff-survey-point.entity';
 import { StaffSurveySheet } from './entities/staff-survey-sheet.entity';
+import { PaginationArgs } from 'src/common/args/pagination.arg';
 
 @Injectable()
 export class StaffSurveyService {
@@ -82,15 +83,64 @@ export class StaffSurveyService {
       `
       SELECT
         criteria.display_name AS criteria,
+        criteria.index AS index,
         AVG(point.point) AS avg_point
       FROM staff_survey_point AS point
       JOIN staff_survey_criteria AS criteria
       ON point.staff_survery_criteria_id = criteria.staff_survery_criteria_id
       WHERE criteria.category = $1
-      GROUP BY criteria.display_name
+      GROUP BY criteria.staff_survery_criteria_id
+      ORDER BY criteria.index
     `,
       [category],
     );
+  }
+
+  async getPointWithCommentByCriteria(
+    category: string,
+    pagination: PaginationArgs,
+  ) {
+    const data = await this.staffSurveyPointRepo.query(
+      `
+      SELECT
+        criteria.display_name AS criteria,
+        criteria.index AS index,
+        point.point,
+        point.comment
+      FROM staff_survey_point AS point
+      JOIN staff_survey_criteria AS criteria
+      ON point.staff_survery_criteria_id = criteria.staff_survery_criteria_id
+      WHERE criteria.category = $1 AND point.comment IS NOT NULL AND point.comment != ''
+      ORDER BY criteria.index
+      LIMIT $2 OFFSET $3
+    `,
+      [category, pagination.size, pagination.page * pagination.size],
+    );
+    const meta = await this.staffSurveyPointRepo.query(
+      `
+      SELECT
+        COUNT(*) AS total_item
+      FROM staff_survey_point AS point
+      JOIN staff_survey_criteria AS criteria
+      ON point.staff_survery_criteria_id = criteria.staff_survery_criteria_id
+      WHERE criteria.category = $1 AND point.comment IS NOT NULL AND point.comment != ''
+    `,
+      [category],
+    );
+
+    return {
+      data,
+      meta: {
+        hasNext:
+          pagination.page < Math.ceil(meta[0].total_item / pagination.size) - 1,
+        hasPrev:
+          pagination.page < Math.ceil(meta[0].total_item / pagination.size) - 1,
+        page: pagination.page,
+        size: pagination.size,
+        total_item: meta[0].total_item,
+        total_page: Math.ceil(meta[0].total_item / pagination.size),
+      },
+    };
   }
 
   async getCriteria({

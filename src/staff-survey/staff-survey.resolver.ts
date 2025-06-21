@@ -1,6 +1,8 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { QueryArgs } from 'src/common/args/query.arg';
 import { PointByCategoryDTO } from './dtos/point-by-category.dto';
 import { PointByCriteriaDTO } from './dtos/point-by-criteria.dto';
+import { StaffSurveyPointResponseDTO } from './dtos/staff-survey-point.dto';
 import { StaffSurveySheetDTO } from './dtos/staff-survey-sheet.dto';
 import { StaffSurveyBatch } from './entities/staff-survey-batch.entity';
 import { StaffSurveyCriteria } from './entities/staff-survey-criteria.entity';
@@ -55,5 +57,16 @@ export class StaffSurveyResolver {
     @Args('category', { type: () => String, nullable: true }) category?: string,
   ) {
     return await this.staffSurveyService.getPointsByCriteria(category);
+  }
+
+  @Query(() => StaffSurveyPointResponseDTO)
+  async getPointWithCommentByCriteria(
+    @Args() { pagination }: QueryArgs,
+    @Args('category', { type: () => String, nullable: true }) category?: string,
+  ) {
+    return await this.staffSurveyService.getPointWithCommentByCriteria(
+      category,
+      pagination,
+    );
   }
 }

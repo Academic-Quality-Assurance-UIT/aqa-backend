@@ -1,4 +1,5 @@
-import { Field, InputType, Int } from '@nestjs/graphql';
+import { Field, InputType, Int, ObjectType } from '@nestjs/graphql';
+import { Paginated } from 'src/common/dto/Paginated.dto';
 
 @InputType()
 export class StaffSurveyPointDTO {
@@ -20,3 +21,23 @@ export class StaffSurveyPointDTO {
   @Field(() => Int, { nullable: true })
   criteria_index: number;
 }
+
+@ObjectType()
+export class StaffSurveyPointResponseItemDTO {
+  @Field(() => Int)
+  point: number;
+
+  @Field({ nullable: true })
+  comment: string;
+
+  @Field()
+  criteria: string;
+
+  @Field()
+  index: number;
+}
+
+@ObjectType()
+export class StaffSurveyPointResponseDTO extends Paginated(
+  StaffSurveyPointResponseItemDTO,
+) {}

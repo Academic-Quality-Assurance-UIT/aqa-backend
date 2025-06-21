@@ -171,6 +171,7 @@ type PointByCategoryDTO {
 type PointByCriteriaDTO {
   avg_point: Float!
   criteria: String!
+  index: Float!
 }
 
 type Program {
@@ -201,6 +202,7 @@ type Query {
   faculty(id: String!): Faculty
   getBatchList: [StaffSurveyBatch!]!
   getCriteriaList: [StaffSurveyCriteria!]!
+  getPointWithCommentByCriteria(category: String, filter: FilterArgs = {}, pagination: PaginationArgs = {page: 0, size: 10}, sort: SortArgs = {}): StaffSurveyPointResponseDTO!
   getPointsByCategory: [PointByCategoryDTO!]!
   getPointsByCriteria(category: String): [PointByCriteriaDTO!]!
 
@@ -266,6 +268,18 @@ input StaffSurveyPointDTO {
   criteria_index: Int
   criteria_name: String
   max_point: Int!
+  point: Int!
+}
+
+type StaffSurveyPointResponseDTO {
+  data: [StaffSurveyPointResponseItemDTO!]!
+  meta: PaginatedMetaData!
+}
+
+type StaffSurveyPointResponseItemDTO {
+  comment: String
+  criteria: String!
+  index: Float!
   point: Int!
 }
 
