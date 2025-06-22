@@ -22,7 +22,7 @@ services:
     image: hoanghy/aqa-backend
     restart: always
     ports:
-      - 80:8080
+      - 80:8000
     depends_on:
       - db
     networks:
