@@ -7,8 +7,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                // git url: 'https://github.com/aqaproject/aqa-backend-nestjs', branch: 'main' 
-                checkout scm
+                git url: 'https://github.com/aqaproject/aqa-backend-nestjs', branch: 'main'
             }
         }
         stage('Build Docker Image') {

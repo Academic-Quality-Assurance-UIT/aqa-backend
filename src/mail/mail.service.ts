@@ -3,15 +3,13 @@ import { ConfigService } from '@nestjs/config';
 import { gmail_v1, google } from 'googleapis';
 import * as MailComposer from 'nodemailer/lib/mail-composer';
 
-import * as TOKENS from './token.json';
-
 @Injectable()
 export class MailService {
   private clientId: string;
   private clientSecret: string;
   private gmail: gmail_v1.Gmail;
 
-  constructor(private configService: ConfigService) {
+  constructor(private readonly configService: ConfigService) {
     this.clientId = configService.get<string>('CLIENT_ID');
     this.clientSecret = configService.get<string>('CLIENT_SECRET');
 
@@ -20,7 +18,9 @@ export class MailService {
       this.clientSecret,
       '/callback',
     );
-    auth.setCredentials(TOKENS);
+    auth.setCredentials({
+      refresh_token: configService.get<string>('REFRESH_TOKEN'),
+    });
 
     this.gmail = google.gmail({ version: 'v1', auth });
   }
