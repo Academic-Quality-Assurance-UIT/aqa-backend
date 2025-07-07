@@ -22,6 +22,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MailModule } from './mail/mail.module';
 import { StaffSurveyModule } from './staff-survey/staff-survey.module';
 import { FileLogger } from './common/logger/typeorm-logger';
+import { AiGenerateModule } from './ai-generate/ai-generate.module';
 
 @Module({
   imports: [
@@ -64,6 +65,7 @@ import { FileLogger } from './common/logger/typeorm-logger';
     PointModule,
     MailModule,
     StaffSurveyModule,
+    AiGenerateModule,
   ],
   controllers: [AppController],
   providers: [AppService],
