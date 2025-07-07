@@ -21,6 +21,7 @@ import { UserModule } from './user/user.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MailModule } from './mail/mail.module';
 import { StaffSurveyModule } from './staff-survey/staff-survey.module';
+import { FileLogger } from './common/logger/typeorm-logger';
 
 @Module({
   imports: [
@@ -45,6 +46,8 @@ import { StaffSurveyModule } from './staff-survey/staff-survey.module';
         database: configService.get<string>('DB_DATABASE'),
         synchronize: true,
         autoLoadEntities: true,
+        logging: false,
+        logger: new FileLogger(),
       }),
     }),
     PermissionModule,
