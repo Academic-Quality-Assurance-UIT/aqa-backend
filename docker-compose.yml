@@ -13,10 +13,10 @@ services:
     networks:
       - postgresql
 
-  classifier:
-    image: hoanghy/aqa-classifier
-    networks:
-      - postgresql
+  # classifier:
+  #   image: hoanghy/aqa-classifier
+  #   networks:
+  #     - postgresql
 
   web:
     image: hoanghy/aqa-backend
