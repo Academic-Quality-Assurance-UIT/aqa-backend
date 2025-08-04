@@ -8,7 +8,9 @@ export class SemesterService {
   constructor(@InjectRepository(Semester) private repo: Repository<Semester>) {}
 
   async findAll() {
-    return (await this.repo.find()).reverse();
+    const query = this.repo.createQueryBuilder('semester');
+
+    return query.orderBy(`semester.search_string`, 'DESC').getMany();
   }
 
   async findOne(id: string) {

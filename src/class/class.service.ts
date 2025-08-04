@@ -29,7 +29,7 @@ export class ClassService extends BaseService<Class> {
           .createQueryBuilder()
           .leftJoin('Class.subject', 'Subject')
           .leftJoin('Class.lecturer', 'Lecturer')
-          .leftJoin('Lecturer.faculty', 'Faculty')
+          .leftJoin('Subject.faculty', 'Faculty')
           .leftJoin('Class.points', 'Point')
           .leftJoin('Class.semester', 'Semester'),
         filter,
