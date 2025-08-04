@@ -53,11 +53,11 @@ export class Class {
   lecturer_id: string;
 
   @Column()
-  @Field(() => Int)
+  @Field(() => Int, { nullable: true, defaultValue: 0 })
   total_student: number;
 
   @Column()
-  @Field(() => Int)
+  @Field(() => Int, { nullable: true, defaultValue: 0 })
   participating_student: number;
 
   @OneToMany(() => Point, (point) => point.class)
