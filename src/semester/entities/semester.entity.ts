@@ -19,4 +19,8 @@ export class Semester {
   @Column()
   @Field({ nullable: true })
   year: string;
+
+  @Column()
+  @Field({ nullable: true })
+  search_string: string;
 }
