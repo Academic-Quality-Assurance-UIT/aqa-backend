@@ -16,7 +16,9 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   async validate(payload: any) {
     const userId = payload.id;
 
-    this.userService.update(userId, { lastAccess: new Date() });
+    try {
+      this.userService.update(userId, { lastAccess: new Date() });
+    } catch (e) {}
 
     return payload;
   }

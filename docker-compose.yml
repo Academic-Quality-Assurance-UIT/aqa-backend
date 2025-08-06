@@ -20,9 +20,11 @@ services:
 
   web:
     image: hoanghy/aqa-backend
+    env_file:
+    - .env
     restart: always
     ports:
-      - 8088:8000
+      - 8000:8000
     depends_on:
       - db
     networks:
