@@ -13,7 +13,17 @@ type Class {
   display_name: String!
   lecturer: Lecturer!
   participating_student: Int
-  points(class_id: String, class_type: String, criteria_id: String, faculty_id: String, keyword: String = "", lecturer_id: String, program: String, semester_id: String, subjects: [String!]): [GroupedPoint!]!
+  points(
+    class_id: String
+    class_type: String
+    criteria_id: String
+    faculty_id: String
+    keyword: String = ""
+    lecturer_id: String
+    program: String
+    semester_id: String
+    subjects: [String!]
+  ): [GroupedPoint!]!
   program: String!
   semester: Semester!
   subject: Subject!
@@ -55,10 +65,38 @@ type Faculty {
   faculty_id: String!
   full_name: String
   is_displayed: Boolean
-  lecturers(filter: FilterArgs = {}, pagination: PaginationArgs = {page: 0, size: 10}, sort: SortArgs = {}): PaginatedLecturer
-  points(class_id: String, class_type: String, criteria_id: String, faculty_id: String, keyword: String = "", lecturer_id: String, program: String, semester_id: String, subjects: [String!]): PaginatedGroupedPoint
-  subjects(filter: FilterArgs = {}, pagination: PaginationArgs = {page: 0, size: 10}, sort: SortArgs = {}): PaginatedSubject
-  total_point(class_id: String, class_type: String, criteria_id: String, faculty_id: String, keyword: String = "", lecturer_id: String, program: String, semester_id: String, subjects: [String!]): GroupedPoint
+  lecturers(
+    filter: FilterArgs = {}
+    pagination: PaginationArgs = { page: 0, size: 10 }
+    sort: SortArgs = {}
+  ): PaginatedLecturer
+  points(
+    class_id: String
+    class_type: String
+    criteria_id: String
+    faculty_id: String
+    keyword: String = ""
+    lecturer_id: String
+    program: String
+    semester_id: String
+    subjects: [String!]
+  ): PaginatedGroupedPoint
+  subjects(
+    filter: FilterArgs = {}
+    pagination: PaginationArgs = { page: 0, size: 10 }
+    sort: SortArgs = {}
+  ): PaginatedSubject
+  total_point(
+    class_id: String
+    class_type: String
+    criteria_id: String
+    faculty_id: String
+    keyword: String = ""
+    lecturer_id: String
+    program: String
+    semester_id: String
+    subjects: [String!]
+  ): GroupedPoint
 }
 
 input FilterArgs {
@@ -84,7 +122,11 @@ type GroupedPoint {
 
 type Lecturer {
   birth_date: DateTime
-  classes(filter: FilterArgs = {}, pagination: PaginationArgs = {page: 0, size: 10}, sort: SortArgs = {}): PaginatedClass!
+  classes(
+    filter: FilterArgs = {}
+    pagination: PaginationArgs = { page: 0, size: 10 }
+    sort: SortArgs = {}
+  ): PaginatedClass!
   display_name: String
   email: String
   faculty: Faculty!
@@ -96,17 +138,25 @@ type Lecturer {
   mscb: Int
   ngach: String
   phone: String
-  points(filter: FilterArgs = {}, pagination: PaginationArgs = {page: 0, size: 10}, sort: SortArgs = {}): [GroupedPoint!]!
+  points(
+    filter: FilterArgs = {}
+    pagination: PaginationArgs = { page: 0, size: 10 }
+    sort: SortArgs = {}
+  ): [GroupedPoint!]!
   position: String
   total_point: Float
   username: String
 }
 
 type Mutation {
-  """Add new staff survey data"""
+  """
+  Add new staff survey data
+  """
   addListStaffSurveyData(data: [StaffSurveySheetDTO!]!): [StaffSurveySheet!]!
 
-  """Add new staff survey data"""
+  """
+  Add new staff survey data
+  """
   addNewStaffSurveyData(data: StaffSurveySheetDTO!): StaffSurveySheet!
   login(password: String!, username: String!): AuthDto!
   registerUser(user: UserDto!): UserEntity!
@@ -179,48 +229,116 @@ type Program {
 }
 
 type Query {
-  """View particular class information"""
+  """
+  View particular class information
+  """
   class(id: String!): Class
 
-  """List all classes"""
-  classes(filter: FilterArgs = {}, pagination: PaginationArgs = {page: 0, size: 10}, sort: SortArgs = {}): PaginatedClass!
+  """
+  List all classes
+  """
+  classes(
+    filter: FilterArgs = {}
+    pagination: PaginationArgs = { page: 0, size: 10 }
+    sort: SortArgs = {}
+  ): PaginatedClass!
 
-  """View particular comment information"""
+  """
+  View particular comment information
+  """
   comment(id: String!): Comment
-  commentQuantity(filter: FilterArgs = {}, pagination: PaginationArgs = {page: 0, size: 10}, sort: SortArgs = {}, type: String): CommentQuantity!
+  commentQuantity(
+    filter: FilterArgs = {}
+    pagination: PaginationArgs = { page: 0, size: 10 }
+    sort: SortArgs = {}
+    type: String
+  ): CommentQuantity!
 
-  """List all comments"""
-  comments(filter: FilterArgs = {}, pagination: PaginationArgs = {page: 0, size: 10}, sort: SortArgs = {}, type: String): PaginatedComment!
+  """
+  List all comments
+  """
+  comments(
+    filter: FilterArgs = {}
+    pagination: PaginationArgs = { page: 0, size: 10 }
+    sort: SortArgs = {}
+    type: String
+  ): PaginatedComment!
   criteria(id: String!): Criteria
-  criterias(filter: FilterArgs = {}, pagination: PaginationArgs = {page: 0, size: 10}, sort: SortArgs = {}): PaginatedCriteria!
+  criterias(
+    filter: FilterArgs = {}
+    pagination: PaginationArgs = { page: 0, size: 10 }
+    sort: SortArgs = {}
+  ): PaginatedCriteria!
   currentUser: UserEntity!
 
-  """List all faculty available"""
-  faculties(filter: FilterArgs = {}, pagination: PaginationArgs = {page: 0, size: 10}, sort: SortArgs = {}): PaginatedFaculty!
+  """
+  List all faculty available
+  """
+  faculties(
+    filter: FilterArgs = {}
+    pagination: PaginationArgs = { page: 0, size: 10 }
+    sort: SortArgs = {}
+  ): PaginatedFaculty!
 
-  """Get detail information of a faculty and its lecturer list"""
+  """
+  Get detail information of a faculty and its lecturer list
+  """
   faculty(id: String!): Faculty
   getBatchList: [StaffSurveyBatch!]!
   getCriteriaList: [StaffSurveyCriteria!]!
-  getPointWithCommentByCriteria(category: String, filter: FilterArgs = {}, pagination: PaginationArgs = {page: 0, size: 10}, sort: SortArgs = {}): StaffSurveyPointResponseDTO!
+  getPointWithCommentByCriteria(
+    category: String
+    filter: FilterArgs = {}
+    pagination: PaginationArgs = { page: 0, size: 10 }
+    sort: SortArgs = {}
+  ): StaffSurveyPointResponseDTO!
   getPointsByCategory: [PointByCategoryDTO!]!
   getPointsByCriteria(category: String): [PointByCriteriaDTO!]!
 
-  """List all points, group by a specific entity"""
-  groupedPoints(class_id: String, class_type: String, criteria_id: String, faculty_id: String, groupEntity: String = "Subject", keyword: String = "", lecturer_id: String, page: Int = 0, program: String, semester_id: String, size: Int = 10, subjects: [String!]): PaginatedGroupedPoint!
+  """
+  List all points, group by a specific entity
+  """
+  groupedPoints(
+    class_id: String
+    class_type: String
+    criteria_id: String
+    faculty_id: String
+    groupEntity: String = "Subject"
+    keyword: String = ""
+    lecturer_id: String
+    page: Int = 0
+    program: String
+    semester_id: String
+    size: Int = 10
+    subjects: [String!]
+  ): PaginatedGroupedPoint!
 
-  """View detail information of a specific lecturer"""
+  """
+  View detail information of a specific lecturer
+  """
   lecturer(id: String!): Lecturer
 
-  """List all lecturer"""
-  lecturers(filter: FilterArgs = {}, pagination: PaginationArgs = {page: 0, size: 10}, sort: SortArgs = {}): PaginatedLecturer!
+  """
+  List all lecturer
+  """
+  lecturers(
+    filter: FilterArgs = {}
+    pagination: PaginationArgs = { page: 0, size: 10 }
+    sort: SortArgs = {}
+  ): PaginatedLecturer!
   profile: UserEntity!
   programs: [Program!]!
 
-  """List all semester"""
+  """
+  List all semester
+  """
   semesters: [Semester!]
   subject(id: String!): Subject
-  subjects(filter: FilterArgs = {}, pagination: PaginationArgs = {page: 0, size: 10}, sort: SortArgs = {}): PaginatedSubject!
+  subjects(
+    filter: FilterArgs = {}
+    pagination: PaginationArgs = { page: 0, size: 10 }
+    sort: SortArgs = {}
+  ): PaginatedSubject!
   users(name: String): [UserEntity!]!
 }
 
@@ -260,7 +378,7 @@ type StaffSurveyCriteria {
   display_name: String!
   index: Int
   semesters: [String!]!
-  staff_survery_criteria_id: String!
+  staff_survey_criteria_id: String!
 }
 
 input StaffSurveyPointDTO {
@@ -315,7 +433,11 @@ type Subject {
   display_name: String
   faculty: Faculty
   faculty_id: String
-  points(filter: FilterArgs = {}, pagination: PaginationArgs = {page: 0, size: 10}, sort: SortArgs = {}): [GroupedPoint!]
+  points(
+    filter: FilterArgs = {}
+    pagination: PaginationArgs = { page: 0, size: 10 }
+    sort: SortArgs = {}
+  ): [GroupedPoint!]
   subject_id: String!
   total_point: Float
 }

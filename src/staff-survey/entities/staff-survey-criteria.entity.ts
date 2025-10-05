@@ -7,7 +7,7 @@ import { Column, Entity, PrimaryColumn, Unique } from 'typeorm';
 export class StaffSurveyCriteria {
   @Field()
   @PrimaryColumn('uuid', { default: () => 'uuid_generate_v4()' })
-  staff_survery_criteria_id: string;
+  staff_survey_criteria_id: string;
 
   @Field()
   @Column()

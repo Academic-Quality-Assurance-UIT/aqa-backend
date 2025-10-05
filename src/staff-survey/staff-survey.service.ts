@@ -72,7 +72,7 @@ export class StaffSurveyService {
         AVG(point.point) AS avg_point
       FROM staff_survey_point AS point
       JOIN staff_survey_criteria AS criteria
-      ON point.staff_survery_criteria_id = criteria.staff_survery_criteria_id
+      ON point.staff_survey_criteria_id = criteria.staff_survey_criteria_id
       WHERE criteria.category != 'ĐƠN VỊ'
       GROUP BY criteria.category
     `);
@@ -87,9 +87,9 @@ export class StaffSurveyService {
         AVG(point.point) AS avg_point
       FROM staff_survey_point AS point
       JOIN staff_survey_criteria AS criteria
-      ON point.staff_survery_criteria_id = criteria.staff_survery_criteria_id
+      ON point.staff_survey_criteria_id = criteria.staff_survey_criteria_id
       WHERE criteria.category = $1
-      GROUP BY criteria.staff_survery_criteria_id
+      GROUP BY criteria.staff_survey_criteria_id
       ORDER BY criteria.index
     `,
       [category],
@@ -109,7 +109,7 @@ export class StaffSurveyService {
         point.comment
       FROM staff_survey_point AS point
       JOIN staff_survey_criteria AS criteria
-      ON point.staff_survery_criteria_id = criteria.staff_survery_criteria_id
+      ON point.staff_survey_criteria_id = criteria.staff_survey_criteria_id
       WHERE criteria.category = $1 AND point.comment IS NOT NULL AND point.comment != ''
       ORDER BY criteria.index
       LIMIT $2 OFFSET $3
@@ -122,7 +122,7 @@ export class StaffSurveyService {
         COUNT(*) AS total_item
       FROM staff_survey_point AS point
       JOIN staff_survey_criteria AS criteria
-      ON point.staff_survery_criteria_id = criteria.staff_survery_criteria_id
+      ON point.staff_survey_criteria_id = criteria.staff_survey_criteria_id
       WHERE criteria.category = $1 AND point.comment IS NOT NULL AND point.comment != ''
     `,
       [category],
@@ -185,7 +185,7 @@ export class StaffSurveyService {
         try {
           await this.staffSurveyCriteriaRepo.update(
             {
-              staff_survery_criteria_id: criteria.staff_survery_criteria_id,
+              staff_survey_criteria_id: criteria.staff_survey_criteria_id,
             },
             {
               semesters: Array.from(

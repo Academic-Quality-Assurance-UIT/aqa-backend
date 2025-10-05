@@ -8,7 +8,7 @@ import { StaffSurveySheet } from './staff-survey-sheet.entity';
 export class StaffSurveyPoint {
   @Field()
   @PrimaryColumn('uuid', { default: () => 'uuid_generate_v4()' })
-  staff_survery_point_id: string;
+  staff_survey_point_id: string;
 
   @Column({ type: 'int' })
   @Field(() => Int)
@@ -23,7 +23,7 @@ export class StaffSurveyPoint {
   comment: string;
 
   @ManyToOne(() => StaffSurveyCriteria, { cascade: false })
-  @JoinColumn({ name: 'staff_survery_criteria_id' })
+  @JoinColumn({ name: 'staff_survey_criteria_id' })
   @Field(() => StaffSurveyCriteria, { nullable: true })
   criteria: StaffSurveyCriteria;
 
