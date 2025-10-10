@@ -29,8 +29,8 @@ export class UserEntity {
   @ManyToOne(() => Lecturer, { nullable: true })
   lecturer?: Lecturer;
 
-  @Field(() => String)
-  @Column()
+  @Field(() => String, { nullable: true })
+  @Column({ nullable: true })
   password: string;
 
   @Field(() => Date, { nullable: true, defaultValue: new Date() })

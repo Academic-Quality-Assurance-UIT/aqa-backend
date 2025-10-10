@@ -348,7 +348,7 @@ type UserEntity {
   lastAccess: DateTime
   lastSendEmail: DateTime
   lecturer: Lecturer
-  password: String!
+  password: String
   role: Role!
   username: String!
 }
