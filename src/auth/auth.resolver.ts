@@ -24,6 +24,13 @@ export class AuthResolver {
     else throw new UnauthorizedException();
   }
 
+  @Mutation(() => AuthDto)
+  async loginIntegration(@Args('token') token: string) {
+    const user = await this.authService.validateUserByToken(token);
+    if (user) return this.authService.login(user);
+    else throw new UnauthorizedException();
+  }
+
   @UseGuards(JwtAuthGuard)
   @Query(() => UserEntity)
   async currentUser(@CurrentUser() user: UserEntity) {

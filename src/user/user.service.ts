@@ -39,6 +39,13 @@ export class UserService {
     });
   }
 
+  async findByDisplayName(displayName: string) {
+    return this.userRepo.findOne({
+      where: { displayName },
+      relations: { faculty: true, lecturer: true },
+    });
+  }
+
   async findAll(name?: string) {
     return this.userRepo
       .createQueryBuilder('User')
