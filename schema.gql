@@ -109,6 +109,7 @@ type Mutation {
   """Add new staff survey data"""
   addNewStaffSurveyData(data: StaffSurveySheetDTO!): StaffSurveySheet!
   login(password: String!, username: String!): AuthDto!
+  loginIntegration(token: String!): AuthDto!
   registerUser(user: UserDto!): UserEntity!
   removeUser(id: String!): Boolean!
   updateUser(user: UpdateUserDto!): UserEntity!
