@@ -30,7 +30,7 @@ export class AuthService {
       if (user) return user;
       else throw new UnauthorizedException('User not found');
     } else {
-      throw new UnauthorizedException('Invalid token');
+      throw new UnauthorizedException(error);
     }
   }
 
