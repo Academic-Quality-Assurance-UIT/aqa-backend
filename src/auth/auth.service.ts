@@ -24,7 +24,6 @@ export class AuthService {
 
   async validateUserByToken(token: string): Promise<UserEntity> {
     const { valid, staffName, error } = await this.verifyBearerToken(token);
-    console.log({ token, valid, staffName, error });
 
     if (valid) {
       const user = await this.userService.findByDisplayName(staffName);
@@ -57,7 +56,6 @@ export class AuthService {
       hmac.update(data);
       const calculatedSignature = hmac.digest('base64');
 
-      console.log({ calculatedSignature, providedSignature });
       if (calculatedSignature !== providedSignature) {
         return { valid: false, error: 'Invalid signature' };
       }
