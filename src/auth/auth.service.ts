@@ -4,7 +4,7 @@ import * as bcrypt from 'bcrypt';
 import { UserEntity } from 'src/user/entities/user.entity';
 import { UserService } from 'src/user/user.service';
 import { RequestUserDto } from './dto/user.dto';
-import crypto from 'crypto';
+import * as crypto from 'crypto';
 import { ConfigService } from '@nestjs/config';
 
 @Injectable()
@@ -23,7 +23,8 @@ export class AuthService {
   }
 
   async validateUserByToken(token: string): Promise<UserEntity> {
-    const { valid, staffName } = await this.verifyBearerToken(token);
+    const { valid, staffName, error } = await this.verifyBearerToken(token);
+    console.log({ token, valid, staffName, error });
 
     if (valid) {
       const user = await this.userService.findByDisplayName(staffName);
@@ -37,40 +38,45 @@ export class AuthService {
   async verifyBearerToken(token) {
     const secret = this.configService.get<string>('SECRET_KEY');
     try {
-      const [data, signature] = token.split('.');
-      if (!data || !signature) {
-        return { valid: false, reason: 'Invalid token format' };
+      const parts = token.split('.');
+      if (parts.length !== 2) {
+        return { valid: false, error: 'Invalid token format' };
       }
+
+      const [data, providedSignature] = parts;
+
+      const lastDashIndex = data.lastIndexOf('-');
+      if (lastDashIndex === -1) {
+        return { valid: false, error: 'Invalid data format' };
+      }
+
+      const staffName = data.substring(0, lastDashIndex);
+      const timestamp = data.substring(lastDashIndex + 1);
 
       const hmac = crypto.createHmac('sha256', secret);
       hmac.update(data);
-      const expectedSignature = hmac.digest('base64');
+      const calculatedSignature = hmac.digest('base64');
 
-      // Timing-safe comparison
-      const isValid = crypto.timingSafeEqual(
-        Buffer.from(signature),
-        Buffer.from(expectedSignature),
-      );
-      if (!isValid) {
-        return { valid: false, reason: 'Invalid signature' };
+      console.log({ calculatedSignature, providedSignature });
+      if (calculatedSignature !== providedSignature) {
+        return { valid: false, error: 'Invalid signature' };
       }
 
-      const [staffName, timestampStr] = data.split('-');
-      const timestamp = parseInt(timestampStr, 10);
-      if (isNaN(timestamp)) {
-        return { valid: false, reason: 'Invalid timestamp' };
+      const tokenAge = Date.now() - parseInt(timestamp);
+      const maxAge = 3600000;
+
+      if (tokenAge > maxAge) {
+        return { valid: false, error: 'Token expired' };
       }
 
-      // Optional: check expiry (e.g., 5 minutes)
-      const now = Date.now();
-      const FIVE_MINUTES = 5 * 60 * 1000;
-      if (now - timestamp > FIVE_MINUTES) {
-        return { valid: false, reason: 'Token expired' };
-      }
-
-      return { valid: true, staffName, timestamp };
-    } catch (err) {
-      return { valid: false, reason: err.message };
+      return {
+        valid: true,
+        staffName: staffName,
+        timestamp: parseInt(timestamp),
+        age: tokenAge,
+      };
+    } catch (error) {
+      return { valid: false, error: error.message };
     }
   }
 
