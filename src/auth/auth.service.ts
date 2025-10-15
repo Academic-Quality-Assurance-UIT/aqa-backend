@@ -26,7 +26,7 @@ export class AuthService {
     const { valid, staffName, error } = await this.verifyBearerToken(token);
 
     if (valid) {
-      const user = await this.userService.findByDisplayName(staffName);
+      const user = await this.userService.findByUsername(staffName);
       if (user) return user;
       else throw new UnauthorizedException('User not found');
     } else {
