@@ -6,6 +6,12 @@ export class GroupedPoint {
   @Field(() => Float)
   average_point: number;
 
+  @Field(() => Float)
+  median_point: number;
+
+  @Field(() => Float)
+  trimmed_mean_point: number;
+
   @Field(() => Float, { nullable: true })
   point: number;
 

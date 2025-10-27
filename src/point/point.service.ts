@@ -30,6 +30,14 @@ export class PointService {
         { ...filter, keyword: '' },
       )
         .select('AVG(Point.point / Point.max_point)', 'average_point')
+        .addSelect(
+          '(PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY point)) / 4',
+          'median_point',
+        )
+        .addSelect(
+          'trimmed_mean_5(Point.point / Point.max_point)',
+          'trimmed_mean_point',
+        )
         .addSelect('AVG(Point.point)', 'point')
         .addSelect('AVG(Point.max_point)', 'max_point')
         .addSelect(`COUNT(DISTINCT(Class.class_id))`, 'class_num')

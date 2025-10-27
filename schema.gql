@@ -79,7 +79,9 @@ type GroupedPoint {
   display_name: String
   id: String!
   max_point: Float
+  median_point: Float!
   point: Float
+  trimmed_mean_point: Float!
 }
 
 type Lecturer {
