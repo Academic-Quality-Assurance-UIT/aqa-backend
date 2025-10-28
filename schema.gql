@@ -24,7 +24,9 @@ type Comment {
   class: Class
   comment_id: String!
   display_name: String!
+  topic: String!
   type: String!
+  type_list: [String!]!
 }
 
 type CommentQuantity {
@@ -190,10 +192,10 @@ type Query {
 
   """View particular comment information"""
   comment(id: String!): Comment
-  commentQuantity(filter: FilterArgs = {}, pagination: PaginationArgs = {page: 0, size: 10}, sort: SortArgs = {}, type: String): CommentQuantity!
+  commentQuantity(filter: FilterArgs = {}, pagination: PaginationArgs = {page: 0, size: 10}, sort: SortArgs = {}, topic: String, type: String): CommentQuantity!
 
   """List all comments"""
-  comments(filter: FilterArgs = {}, pagination: PaginationArgs = {page: 0, size: 10}, sort: SortArgs = {}, type: String): PaginatedComment!
+  comments(filter: FilterArgs = {}, pagination: PaginationArgs = {page: 0, size: 10}, sort: SortArgs = {}, topic: [String!], type: [String!]): PaginatedComment!
   criteria(id: String!): Criteria
   criterias(filter: FilterArgs = {}, pagination: PaginationArgs = {page: 0, size: 10}, sort: SortArgs = {}): PaginatedCriteria!
   currentUser: UserEntity!

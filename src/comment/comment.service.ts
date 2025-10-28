@@ -11,7 +11,12 @@ import { Comment } from './entities/comment.entity';
 export class CommentService {
   constructor(@InjectRepository(Comment) private repo: Repository<Comment>) {}
 
-  findAll(filter: FilterArgs, paginationOptions: PaginationArgs, type: string) {
+  findAll(
+    filter: FilterArgs,
+    paginationOptions: PaginationArgs,
+    type: string[],
+    topic: string[],
+  ) {
     return paginateByQuery(
       filterQuery<Comment>(
         'Comment',
@@ -23,9 +28,24 @@ export class CommentService {
           .innerJoin('Class.semester', 'Semester')
           .innerJoin('Class.lecturer', 'Lecturer'),
         filter,
-      ).andWhere(type && type != 'all' ? 'Comment.type = :type' : 'true', {
-        type,
-      }),
+      )
+        .andWhere('array_length(Comment.type_list, 1) > 0')
+        .andWhere(
+          type && !type.includes('all') && type.length > 0
+            ? 'Comment.type_list && ARRAY[:...type]'
+            : 'true',
+          {
+            type: type && type.length > 0 ? type : [],
+          },
+        )
+        .andWhere(
+          topic && !topic.includes('all') && topic.length > 0
+            ? 'Comment.topic IN (:...topic)'
+            : 'true',
+          {
+            topic: topic && topic.length > 0 ? topic : [],
+          },
+        ),
       paginationOptions,
       filter,
       {
@@ -36,7 +56,7 @@ export class CommentService {
     );
   }
 
-  async getQuantity(filter: FilterArgs, type: string) {
+  async getQuantity(filter: FilterArgs, type: string, topic: string) {
     return {
       type: type ?? 'all',
       quantity:
@@ -51,9 +71,19 @@ export class CommentService {
             .innerJoin('Class.lecturer', 'Lecturer'),
           filter,
         )
-          .andWhere(type && type != 'all' ? 'Comment.type = :type' : 'true', {
-            type,
-          })
+          .andWhere('array_length(Comment.type_list, 1) > 0')
+          .andWhere(
+            type && type != 'all' ? ':type = ANY(Comment.type_list) ' : 'true',
+            {
+              type,
+            },
+          )
+          .andWhere(
+            topic && topic != 'all' ? 'Comment.topic = :topic' : 'true',
+            {
+              topic,
+            },
+          )
           .getCount()) || 0,
     };
   }

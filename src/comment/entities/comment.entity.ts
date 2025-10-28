@@ -21,4 +21,17 @@ export class Comment {
   @Column()
   @Field(() => String)
   type: string;
+
+  @Column({
+    type: 'text',
+    array: true,
+    default: [],
+    nullable: true,
+  })
+  @Field(() => [String])
+  type_list: string[];
+
+  @Column()
+  @Field(() => String)
+  topic: string;
 }

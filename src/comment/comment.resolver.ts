@@ -15,17 +15,19 @@ export class CommentResolver {
   })
   findAll(
     @Args() { filter, pagination }: QueryArgs,
-    @Args('type', { nullable: true }) type: string,
+    @Args('type', { type: () => [String], nullable: true }) type: string[],
+    @Args('topic', { type: () => [String], nullable: true }) topic: string[],
   ) {
-    return this.commentService.findAll(filter, pagination, type);
+    return this.commentService.findAll(filter, pagination, type, topic);
   }
 
   @Query(() => CommentQuantity, { name: 'commentQuantity' })
-  commenQuantity(
+  commentQuantity(
     @Args() { filter }: QueryArgs,
     @Args('type', { nullable: true }) type: string,
+    @Args('topic', { nullable: true }) topic: string,
   ) {
-    return this.commentService.getQuantity(filter, type);
+    return this.commentService.getQuantity(filter, type, topic);
   }
 
   @Query(() => Comment, {
