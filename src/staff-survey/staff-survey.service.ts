@@ -25,7 +25,7 @@ export class StaffSurveyService {
   async create(inputData: StaffSurveySheetDTO) {
     const { survey_name: surveyName, points, ...data } = inputData;
 
-    const batch = await this.getBatch(surveyName);
+    const batch = await this.getBatch(surveyName, inputData.semester);
 
     const surveySheet = (
       await this.repo.insert({
@@ -209,7 +209,7 @@ export class StaffSurveyService {
     return criteria;
   }
 
-  async getBatch(surveyName: string) {
+  async getBatch(surveyName: string, semester?: string) {
     const batchName =
       surveyName ||
       `Khảo sát CBNV (Upload ${moment().format('HH:mm, DD-MM-YYYY')})`;
@@ -223,6 +223,7 @@ export class StaffSurveyService {
     if (!batch) {
       const batchData = this.staffSurveyBatchRepo.create({
         display_name: batchName,
+        semester,
         updated_at: new Date(),
       });
       try {

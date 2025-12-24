@@ -256,6 +256,7 @@ input SortFieldArgs {
 
 type StaffSurveyBatch {
   display_name: String
+  semester: String
   staff_survey_batch_id: String!
   updated_at: DateTime
 }

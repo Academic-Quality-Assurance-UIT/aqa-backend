@@ -12,6 +12,10 @@ export class StaffSurveyBatch {
   @Column({ nullable: true, unique: true })
   display_name: string;
 
+  @Field({ nullable: true })
+  @Column({ nullable: true })
+  semester: string;
+
   @Field(() => Date, { nullable: true })
   @Column({ nullable: true, type: 'timestamptz' })
   updated_at: Date;
