@@ -207,9 +207,10 @@ type Query {
   faculty(id: String!): Faculty
   getBatchList: [StaffSurveyBatch!]!
   getCriteriaList: [StaffSurveyCriteria!]!
-  getPointWithCommentByCriteria(category: String, filter: FilterArgs = {}, pagination: PaginationArgs = {page: 0, size: 10}, sort: SortArgs = {}): StaffSurveyPointResponseDTO!
-  getPointsByCategory: [PointByCategoryDTO!]!
-  getPointsByCriteria(category: String): [PointByCriteriaDTO!]!
+  getPointWithCommentByCriteria(category: String, filter: FilterArgs = {}, pagination: PaginationArgs = {page: 0, size: 10}, semester: String, sort: SortArgs = {}): StaffSurveyPointResponseDTO!
+  getPointsByCategory(semester: String): [PointByCategoryDTO!]!
+  getPointsByCriteria(category: String, semester: String): [PointByCriteriaDTO!]!
+  getSurveySemesterList: [String!]!
 
   """List all points, group by a specific entity"""
   groupedPoints(class_id: String, class_type: String, criteria_id: String, faculty_id: String, groupEntity: String = "Subject", keyword: String = "", lecturer_id: String, page: Int = 0, program: String, semester_id: String, size: Int = 10, subjects: [String!]): PaginatedGroupedPoint!

@@ -47,26 +47,37 @@ export class StaffSurveyResolver {
     return await this.staffSurveyService.getBatchList();
   }
 
+  @Query(() => [String])
+  async getSurveySemesterList() {
+    return await this.staffSurveyService.getSemesterList();
+  }
+
   @Query(() => [PointByCategoryDTO])
-  async getPointsByCategory() {
-    return await this.staffSurveyService.getPointsByCategory();
+  async getPointsByCategory(
+    @Args('semester', { type: () => String, nullable: true }) semester?: string,
+  ) {
+    return await this.staffSurveyService.getPointsByCategory(semester);
   }
 
   @Query(() => [PointByCriteriaDTO])
   async getPointsByCriteria(
     @Args('category', { type: () => String, nullable: true }) category?: string,
+    @Args('semester', { type: () => String, nullable: true }) semester?: string,
   ) {
-    return await this.staffSurveyService.getPointsByCriteria(category);
+    return await this.staffSurveyService.getPointsByCriteria(category, semester);
   }
 
   @Query(() => StaffSurveyPointResponseDTO)
   async getPointWithCommentByCriteria(
     @Args() { pagination }: QueryArgs,
     @Args('category', { type: () => String, nullable: true }) category?: string,
+    @Args('semester', { type: () => String, nullable: true }) semester?: string,
   ) {
     return await this.staffSurveyService.getPointWithCommentByCriteria(
       category,
       pagination,
+      semester,
     );
   }
 }
+
