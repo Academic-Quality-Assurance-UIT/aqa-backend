@@ -8,6 +8,7 @@ import { StaffSurveyCriteria } from './entities/staff-survey-criteria.entity';
 import { StaffSurveyPoint } from './entities/staff-survey-point.entity';
 import { StaffSurveySheet } from './entities/staff-survey-sheet.entity';
 import { PaginationArgs } from 'src/common/args/pagination.arg';
+import { StaffSurveyAdditionalCommentDTO } from './dtos/staff-survey-additional-comment.dto';
 
 @Injectable()
 export class StaffSurveyService {
@@ -204,6 +205,28 @@ export class StaffSurveyService {
         total_page: Math.ceil(meta[0].total_item / pagination.size),
       },
     };
+  }
+
+  async getAdditionalComments(
+    semester?: string,
+  ): Promise<StaffSurveyAdditionalCommentDTO[]> {
+    const query = this.repo
+      .createQueryBuilder('sheet')
+      .leftJoin('sheet.batch', 'batch')
+      .select([
+        'sheet.display_name',
+        'sheet.faculty',
+        'sheet.additional_comment',
+      ])
+      .where(
+        "sheet.additional_comment IS NOT NULL AND sheet.additional_comment != ''",
+      );
+
+    if (semester) {
+      query.andWhere('batch.semester = :semester', { semester });
+    }
+
+    return await query.getMany();
   }
 
   async getCriteria({

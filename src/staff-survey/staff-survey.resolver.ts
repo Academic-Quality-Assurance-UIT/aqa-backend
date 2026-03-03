@@ -2,6 +2,7 @@ import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { QueryArgs } from 'src/common/args/query.arg';
 import { PointByCategoryDTO } from './dtos/point-by-category.dto';
 import { PointByCriteriaDTO } from './dtos/point-by-criteria.dto';
+import { StaffSurveyAdditionalCommentDTO } from './dtos/staff-survey-additional-comment.dto';
 import { StaffSurveyPointResponseDTO } from './dtos/staff-survey-point.dto';
 import { StaffSurveySheetDTO } from './dtos/staff-survey-sheet.dto';
 import { StaffSurveyBatch } from './entities/staff-survey-batch.entity';
@@ -78,6 +79,13 @@ export class StaffSurveyResolver {
       pagination,
       semester,
     );
+  }
+
+  @Query(() => [StaffSurveyAdditionalCommentDTO])
+  async getAdditionalComments(
+    @Args('semester', { type: () => String, nullable: true }) semester?: string,
+  ) {
+    return await this.staffSurveyService.getAdditionalComments(semester);
   }
 }
 

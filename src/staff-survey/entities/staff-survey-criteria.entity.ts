@@ -24,4 +24,8 @@ export class StaffSurveyCriteria {
   @Field(() => [String], { defaultValue: [] })
   @Column({ type: 'text', array: true, default: () => "'{}'" })
   semesters: string[];
+
+  @Field({ defaultValue: true })
+  @Column({ default: true })
+  is_point_aggregated: boolean;
 }
