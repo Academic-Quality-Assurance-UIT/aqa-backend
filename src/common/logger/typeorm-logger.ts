@@ -6,6 +6,13 @@ import * as path from 'path';
 export class FileLogger implements Logger {
   private logFile = path.join(__dirname, '../../../logs/sql.log');
 
+  constructor() {
+    const logDir = path.dirname(this.logFile);
+    if (!fs.existsSync(logDir)) {
+      fs.mkdirSync(logDir, { recursive: true });
+    }
+  }
+
   private writeToFile(message: string) {
     fs.appendFileSync(
       this.logFile,
