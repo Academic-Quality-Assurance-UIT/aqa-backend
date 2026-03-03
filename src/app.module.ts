@@ -27,6 +27,7 @@ import { AiGenerateModule } from './ai-generate/ai-generate.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
+      isGlobal: true,
       envFilePath: ['.env'],
     }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
