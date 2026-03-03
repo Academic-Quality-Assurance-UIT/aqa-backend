@@ -52,6 +52,20 @@ export class Class {
   @Column()
   lecturer_id: string;
 
+  @ManyToOne(() => Lecturer)
+  @JoinColumn({ name: 'lecturer_1_id' })
+  lecturer_1: Lecturer;
+
+  @Column({ nullable: true })
+  lecturer_1_id: string;
+
+  @ManyToOne(() => Lecturer)
+  @JoinColumn({ name: 'lecturer_2_id' })
+  lecturer_2: Lecturer;
+
+  @Column({ nullable: true })
+  lecturer_2_id: string;
+
   @Column()
   @Field(() => Int, { nullable: true, defaultValue: 0 })
   total_student: number;

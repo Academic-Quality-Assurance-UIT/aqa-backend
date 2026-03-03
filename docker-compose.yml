@@ -1,3 +1,8 @@
+networks:
+  aqa-network:
+    name: aqa-network
+    driver: bridge
+
 services:
   db:
     image: postgres:latest
@@ -11,26 +16,30 @@ services:
     volumes:
       - postgresql-volume:/var/lib/postgresql/data
     networks:
-      - postgresql
+      - aqa-network
 
-  # classifier:
-  #   image: hoanghy/aqa-classifier
-  #   networks:
-  #     - postgresql
-
-  web:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
     image: hoanghy/aqa-backend
     env_file:
-    - .env
+      - .env
+    environment:
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=jnhbgvfc
+      - DB_DATABASE=aqa
     restart: always
     ports:
       - 8000:8000
     depends_on:
       - db
     networks:
-      - postgresql
+      - aqa-network
 
-networks:
-  postgresql:
 volumes:
   postgresql-volume:
+
+

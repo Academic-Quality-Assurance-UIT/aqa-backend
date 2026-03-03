@@ -6,6 +6,7 @@ import { filterQuery } from 'src/common/utils/filterQuery';
 import { paginateByQuery } from 'src/common/utils/paginate';
 import { Repository } from 'typeorm';
 import { Point } from './entities/point.entity';
+import { Lecturer } from 'src/lecturer/entities/lecturer.entity';
 
 @Injectable()
 export class PointService {
@@ -26,7 +27,11 @@ export class PointService {
           .innerJoin('Class.semester', 'Semester')
           .innerJoin('Point.criteria', 'Criteria')
           .innerJoin('Subject.faculty', 'Faculty')
-          .innerJoin('Class.lecturer', 'Lecturer'),
+          .innerJoin(
+            Lecturer,
+            'Lecturer',
+            'Lecturer.lecturer_id = Class.lecturer_id OR Lecturer.lecturer_id = Class.lecturer_1_id OR Lecturer.lecturer_id = Class.lecturer_2_id',
+          ),
         { ...filter, keyword: '' },
       )
         .select('AVG(Point.point / Point.max_point)', 'average_point')

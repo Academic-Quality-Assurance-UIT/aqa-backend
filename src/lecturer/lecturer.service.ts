@@ -6,6 +6,7 @@ import { filterQuery } from 'src/common/utils/filterQuery';
 import { paginateByQuery } from 'src/common/utils/paginate';
 import { FindOptionsRelations, Repository } from 'typeorm';
 import { Lecturer } from './entities/lecturer.entity';
+import { Class } from 'src/class/entities/class.entity';
 
 @Injectable()
 export class LecturerService extends BaseService<Lecturer> {
@@ -23,7 +24,11 @@ export class LecturerService extends BaseService<Lecturer> {
         Lecturer,
         this.repo
           .createQueryBuilder()
-          .leftJoin('Lecturer.classes', 'Class')
+          .leftJoin(
+            Class,
+            'Class',
+            'Class.lecturer_id = Lecturer.lecturer_id OR Class.lecturer_1_id = Lecturer.lecturer_id OR Class.lecturer_2_id = Lecturer.lecturer_id',
+          )
           .leftJoin('Class.points', 'Point')
           .leftJoin('Class.subject', 'Subject')
           .leftJoin('Subject.faculty', 'Faculty')

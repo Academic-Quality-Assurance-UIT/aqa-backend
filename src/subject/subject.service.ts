@@ -8,6 +8,7 @@ import { paginateByQuery } from 'src/common/utils/paginate';
 import { Point } from 'src/point/entities/point.entity';
 import { FindOptionsRelations, Repository } from 'typeorm';
 import { Subject } from './entities/subject.entity';
+import { Lecturer } from 'src/lecturer/entities/lecturer.entity';
 
 @Injectable()
 export class SubjectService extends BaseService<Subject> {
@@ -27,7 +28,11 @@ export class SubjectService extends BaseService<Subject> {
           .leftJoin(Point, 'Point', 'Point.class_id = Class.class_id')
           .leftJoin('Subject.faculty', 'Faculty')
           .leftJoin('Class.semester', 'Semester')
-          .innerJoin('Class.lecturer', 'Lecturer'),
+          .innerJoin(
+            Lecturer,
+            'Lecturer',
+            'Lecturer.lecturer_id = Class.lecturer_id OR Lecturer.lecturer_id = Class.lecturer_1_id OR Lecturer.lecturer_id = Class.lecturer_2_id',
+          ),
         filter,
         sort,
       )

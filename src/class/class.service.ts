@@ -15,6 +15,8 @@ export class ClassService extends BaseService<Class> {
 
   relations: FindOptionsRelations<Class> = {
     lecturer: true,
+    lecturer_1: true,
+    lecturer_2: true,
     semester: true,
     subject: {
       faculty: true,

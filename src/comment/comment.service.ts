@@ -6,6 +6,7 @@ import { filterQuery } from 'src/common/utils/filterQuery';
 import { paginateByQuery } from 'src/common/utils/paginate';
 import { Repository } from 'typeorm';
 import { Comment } from './entities/comment.entity';
+import { Lecturer } from 'src/lecturer/entities/lecturer.entity';
 
 @Injectable()
 export class CommentService {
@@ -26,7 +27,11 @@ export class CommentService {
           .innerJoin('Class.subject', 'Subject')
           .innerJoin('Subject.faculty', 'Faculty')
           .innerJoin('Class.semester', 'Semester')
-          .innerJoin('Class.lecturer', 'Lecturer'),
+          .innerJoin(
+            Lecturer,
+            'Lecturer',
+            'Lecturer.lecturer_id = Class.lecturer_id OR Lecturer.lecturer_id = Class.lecturer_1_id OR Lecturer.lecturer_id = Class.lecturer_2_id',
+          ),
         filter,
       )
         .andWhere('array_length(Comment.type_list, 1) > 0')
@@ -68,7 +73,11 @@ export class CommentService {
             .innerJoin('Class.subject', 'Subject')
             .innerJoin('Subject.faculty', 'Faculty')
             .innerJoin('Class.semester', 'Semester')
-            .innerJoin('Class.lecturer', 'Lecturer'),
+            .innerJoin(
+              Lecturer,
+              'Lecturer',
+              'Lecturer.lecturer_id = Class.lecturer_id OR Lecturer.lecturer_id = Class.lecturer_1_id OR Lecturer.lecturer_id = Class.lecturer_2_id',
+            ),
           filter,
         )
           .andWhere('array_length(Comment.type_list, 1) > 0')

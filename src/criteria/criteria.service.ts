@@ -7,6 +7,7 @@ import { paginateByQuery } from 'src/common/utils/paginate';
 import { Repository } from 'typeorm';
 import { Criteria } from './entities/criteria.entity';
 import { Class } from 'src/class/entities/class.entity';
+import { Lecturer } from 'src/lecturer/entities/lecturer.entity';
 
 @Injectable()
 export class CriteriaService extends BaseService<Criteria> {
@@ -31,7 +32,11 @@ export class CriteriaService extends BaseService<Criteria> {
           .leftJoin('Point.class', 'Class')
           .leftJoin('Class.semester', 'Semester')
           .leftJoin('Class.subject', 'Subject')
-          .leftJoin('Class.lecturer', 'Lecturer')
+          .leftJoin(
+            Lecturer,
+            'Lecturer',
+            'Lecturer.lecturer_id = Class.lecturer_id OR Lecturer.lecturer_id = Class.lecturer_1_id OR Lecturer.lecturer_id = Class.lecturer_2_id',
+          )
           .leftJoin('Subject.faculty', 'Faculty'),
         filter,
         sort,

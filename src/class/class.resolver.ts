@@ -57,6 +57,20 @@ export class ClassResolver {
     return await this.lecturerService.findOne(lecturer_id);
   }
 
+  @ResolveField(() => Lecturer, { nullable: true })
+  async lecturer_1(@Parent() classItem: Class) {
+    const { lecturer_1_id } = classItem;
+    if (!lecturer_1_id) return null;
+    return await this.lecturerService.findOne(lecturer_1_id);
+  }
+
+  @ResolveField(() => Lecturer, { nullable: true })
+  async lecturer_2(@Parent() classItem: Class) {
+    const { lecturer_2_id } = classItem;
+    if (!lecturer_2_id) return null;
+    return await this.lecturerService.findOne(lecturer_2_id);
+  }
+
   @ResolveField(() => Semester)
   async semester(@Parent() classItem: Class) {
     const { semester_id } = classItem;

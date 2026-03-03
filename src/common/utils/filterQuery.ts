@@ -48,13 +48,23 @@ export function filterQuery<T>(
       criterid_id: filter.criteria_id,
     });
 
-  if (filter.lecturer_id)
-    filteredQuery = filteredQuery.andWhere(
-      'Lecturer.lecturer_id = :lecturer_id',
-      {
-        lecturer_id: filter.lecturer_id,
-      },
-    );
+  if (filter.lecturer_id) {
+    if (tableName === 'Lecturer') {
+      filteredQuery = filteredQuery.andWhere(
+        'Lecturer.lecturer_id = :lecturer_id',
+        {
+          lecturer_id: filter.lecturer_id,
+        },
+      );
+    } else {
+      filteredQuery = filteredQuery.andWhere(
+        '(Class.lecturer_id = :lecturer_id OR Class.lecturer_1_id = :lecturer_id OR Class.lecturer_2_id = :lecturer_id)',
+        {
+          lecturer_id: filter.lecturer_id,
+        },
+      );
+    }
+  }
 
   if (filter.class_id)
     filteredQuery = filteredQuery.andWhere('Class.class_id = :class_id', {

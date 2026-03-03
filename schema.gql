@@ -12,6 +12,8 @@ type Class {
   class_type: String!
   display_name: String!
   lecturer: Lecturer!
+  lecturer_1: Lecturer
+  lecturer_2: Lecturer
   participating_student: Int
   points(class_id: String, class_type: String, criteria_id: String, faculty_id: String, keyword: String = "", lecturer_id: String, program: String, semester_id: String, subjects: [String!]): [GroupedPoint!]!
   program: String!
@@ -205,11 +207,16 @@ type Query {
 
   """Get detail information of a faculty and its lecturer list"""
   faculty(id: String!): Faculty
+  getAdditionalComments(semester: String): [StaffSurveyAdditionalCommentDTO!]!
+  getAllComments(filter: FilterArgs = {}, keyword: String, pagination: PaginationArgs = {page: 0, size: 10}, semester: String, sort: SortArgs = {}): StaffSurveyPointResponseDTO!
+  getAllCommentsCount(keyword: String, semester: String): Int!
   getBatchList: [StaffSurveyBatch!]!
   getCriteriaList: [StaffSurveyCriteria!]!
-  getPointWithCommentByCriteria(category: String, filter: FilterArgs = {}, pagination: PaginationArgs = {page: 0, size: 10}, semester: String, sort: SortArgs = {}): StaffSurveyPointResponseDTO!
+  getPointWithCommentByCriteria(category: String, displayName: String, filter: FilterArgs = {}, pagination: PaginationArgs = {page: 0, size: 10}, semester: String, sort: SortArgs = {}): StaffSurveyPointResponseDTO!
   getPointsByCategory(semester: String): [PointByCategoryDTO!]!
-  getPointsByCriteria(category: String, semester: String): [PointByCriteriaDTO!]!
+  getPointsByCategoryDonVi(semester: String): [PointByCategoryDTO!]!
+  getPointsByCriteria(category: String, displayName: String, semester: String): [PointByCriteriaDTO!]!
+  getStaffSurveyCommentCount(category: String, displayName: String, semester: String): Int!
   getSurveySemesterList: [String!]!
 
   """List all points, group by a specific entity"""
@@ -255,6 +262,12 @@ input SortFieldArgs {
   type: String! = "name"
 }
 
+type StaffSurveyAdditionalCommentDTO {
+  additional_comment: String
+  display_name: String
+  faculty: String
+}
+
 type StaffSurveyBatch {
   display_name: String
   semester: String
@@ -266,6 +279,7 @@ type StaffSurveyCriteria {
   category: String!
   display_name: String!
   index: Int
+  is_point_aggregated: Boolean!
   semesters: [String!]!
   staff_survey_criteria_id: String!
 }
